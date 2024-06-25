@@ -12,7 +12,7 @@ app.template_folder = "templates"
 def analyze_sentiment():
   if request.method == "POST":
     review_text = request.form["review"]
-    # Preprocess the review (optional, based on your preprocessing steps)
+    # Preprocess the review
     review_text = review_text.strip().lower()
     # Transform the review using the fitted vectorizer
     review_features = vectorizer.transform([review_text])
