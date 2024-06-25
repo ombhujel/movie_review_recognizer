@@ -6,16 +6,8 @@ from sklearn.metrics import accuracy_score
 from joblib import dump, load
 import os
 
+# Reads reviews from all text files within a directory, preprocesses them, and returns a list.
 def preprocess_data(data_dir):
-  """
-  Reads reviews from all text files within a directory, preprocesses them, and returns a list.
-
-  Args:
-      data_dir: Path to the directory containing review files.
-
-  Returns:
-      A list of preprocessed reviews.
-  """
   reviews = []
   for filename in os.listdir(data_dir):
     filepath = os.path.join(data_dir, filename)
@@ -25,10 +17,10 @@ def preprocess_data(data_dir):
   return reviews
 
 # Load data (replace paths with yours)
-lpos_train = preprocess_data("/home/om_linux/mrr/train/lpos")
-lneg_train = preprocess_data("/home/om_linux/mrr/train/lneg")
-lpos_test = preprocess_data("/home/om_linux/mrr/test/lpos")
-lneg_test = preprocess_data("/home/om_linux/mrr/test/lneg")
+lpos_train = preprocess_data("/train/lpos")
+lneg_train = preprocess_data("/train/lneg")
+lpos_test = preprocess_data("/test/lpos")
+lneg_test = preprocess_data("/test/lneg")
 
 # Combine reviews and labels
 train_data = lpos_train + lneg_train
@@ -52,32 +44,6 @@ predictions = model.predict(test_features)
 accuracy = accuracy_score(test_labels, predictions)
 print("Test Accuracy:", accuracy)
 
-# Save the model for future use (optional)
+# Save the model for future use
 dump(model, "sentiment_model.pkl")
-dump(vectorizer, "vectorizer.pkl")  # Added line to save the vectorizer
-
-# Example usage of saved model (optional)
-def predict_sentiment(new_review, model_path="sentiment_model.pkl"):
-  """
-  Predicts sentiment of a new review using the saved model.
-
-  Args:
-      new_review: The review text to classify.
-      model_path: Path to the saved model (default: sentiment_model.pkl).
-
-  Returns:
-      "Positive Review" or "Negative Review" based on the prediction.
-  """
-  loaded_model = load(model_path)
-  new_features = vectorizer.transform([new_review])
-  prediction = loaded_model.predict(new_features)
-  if prediction[0] == 1:
-    return "Positive Review"
-  else:
-    return "Negative Review"
-
-# Example usage
-new_review = "This product is excellent!"
-sentiment = predict_sentiment(new_review)
-print(sentiment)
-
+dump(vectorizer, "vectorizer.pkl")  
